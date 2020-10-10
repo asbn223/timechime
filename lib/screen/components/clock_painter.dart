@@ -4,23 +4,22 @@ import 'package:flutter/material.dart';
 
 class ClockPainter extends CustomPainter {
   final BuildContext context;
-  final DateTime dt;
+  final DateTime dateTime;
 
-  ClockPainter(this.context, this.dt);
-
+  ClockPainter(this.context, this.dateTime);
   @override
   void paint(Canvas canvas, Size size) {
     double centerX = size.width / 2;
     double centerY = size.height / 2;
     Offset center = Offset(centerX, centerY);
 
-    //Second Calculation
-    // width * 0.4 define our second line height
-    // second * 6 define 360 / 60 =  6
-    double minX = centerX + size.width * 0.35 * cos((dt.minute * 6) * pi / 180);
-    double minY = centerY + size.width * 0.35 * sin((dt.minute * 6) * pi / 180);
+    // Minute Calculation
+    double minX =
+        centerX + size.width * 0.35 * cos((dateTime.minute * 6) * pi / 180);
+    double minY =
+        centerY + size.width * 0.35 * sin((dateTime.minute * 6) * pi / 180);
 
-    //Minutes Line
+    //Minute Line
     canvas.drawLine(
       center,
       Offset(minX, minY),
@@ -30,14 +29,19 @@ class ClockPainter extends CustomPainter {
         ..strokeWidth = 10,
     );
 
-    //Hours Calculation
-
+    // Hour Calculation
+    // dateTime.hour * 30 because 360/12 = 30
+    // dateTime.minute * 0.5 each minute we want to turn our hour line a little
     double hourX = centerX +
-        size.width * 0.3 * cos((dt.hour * 30 + dt.minute * 0.5) * pi / 180);
+        size.width *
+            0.3 *
+            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     double hourY = centerY +
-        size.width * 0.3 * sin((dt.hour * 30 + dt.minute * 0.5) * pi / 180);
+        size.width *
+            0.3 *
+            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
 
-    //Hours Line
+    // hour Line
     canvas.drawLine(
       center,
       Offset(hourX, hourY),
@@ -47,29 +51,29 @@ class ClockPainter extends CustomPainter {
         ..strokeWidth = 10,
     );
 
-    //Second Calculation
-    // width * 0.4 define our second line height
-    // second * 6 define 360 / 60 =  6
+    // Second Calculation
+    // size.width * 0.4 define our line height
+    // dateTime.second * 6 because 360 / 60 = 6
     double secondX =
-        centerX + size.width * 0.4 * cos((dt.second * 6) * pi / 180);
+        centerX + size.width * 0.4 * cos((dateTime.second * 6) * pi / 180);
     double secondY =
-        centerY + size.width * 0.4 * sin((dt.second * 6) * pi / 180);
+        centerY + size.width * 0.4 * sin((dateTime.second * 6) * pi / 180);
 
-    //Seconds Line
+    // Second Line
     canvas.drawLine(center, Offset(secondX, secondY),
         Paint()..color = Theme.of(context).primaryColor);
 
-    //Center Dot
-    Paint dot = Paint()..color = Theme.of(context).primaryIconTheme.color;
-    canvas.drawCircle(center, 24, dot);
+// center Dots
+    Paint dotPainter = Paint()
+      ..color = Theme.of(context).primaryIconTheme.color;
+    canvas.drawCircle(center, 24, dotPainter);
     canvas.drawCircle(
         center, 23, Paint()..color = Theme.of(context).backgroundColor);
-    canvas.drawCircle(center, 10, dot);
+    canvas.drawCircle(center, 10, dotPainter);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
